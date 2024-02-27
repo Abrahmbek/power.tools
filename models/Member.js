@@ -5,12 +5,13 @@ const bcrypt = require("bcryptjs");
 
 class Member {
       constructor() {
-       rhis.memberModel = MemberModel;
+       this.memberModel = MemberModel;
       }
   
   
  async singupData(input) {
-      try {
+   try {
+       console.log("signup data is working...");
       const salt = await bcrypt.genSalt();
       input.mb_password = await bcrypt.hash(input.mb_password, salt);
 
