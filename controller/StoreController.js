@@ -2,6 +2,7 @@ const assert = require("assert");
 const Member = require("../models/Member");
 const Product = require("../models/Product");
 const Definer = require("../lib/mistake");
+const Store = require("../models/Store")
 
 let StoreController = module.exports;
 
@@ -25,7 +26,7 @@ StoreController.getMyStoreProducts = async (req, res) => {
     res.render("store-menu", {store_data: data});
   } catch (err) {
     console.log(`ERROR,  cont/getMyStoreProducts, ${err.message}`);
-    res.json({ state: "fail", message: err.message });
+    res.redirect("/Store");
   }
 };
 
@@ -46,7 +47,8 @@ StoreController.signupProcess = async (req, res) => {
 
     let new_member = req.body;
     new_member.mb_type = "STORE";
-    new_member.mb_image = req.file.path;
+   // new_member.mb_image = req.file.path;
+    new_member.mb_image = req.file.path.replace(/\\/g, "/");
 
     const member = new Member();
       const result = await member.singupData(new_member);
@@ -55,7 +57,6 @@ StoreController.signupProcess = async (req, res) => {
     req.session.member = result;
     res.redirect("/Store/products/menu");
 
-    res.json({ state: "succeed", data: new_member });
   } catch (err) {
     console.log(`ERROR,  cont/signupProcess , ${err.message}`);
     res.json({ state: "fail", message: err.message });
@@ -121,3 +122,45 @@ StoreController.checkSessions = (req, res) => {
     res.json({ state: "fail", message: "you are not authenticated" });
   }
 };
+
+
+StoreController.validateAdmin = ( req, res, next) => {
+  if ( req.session?.member?.mb_type === "ADMIN") {
+      req.member = req.session.member;
+      next();
+  } else {
+    
+    const html = `<script>
+                 alert('Admin page: Permission Denied');
+                  window.location.replace('/Store');
+               </script>`;
+     res.end(html);  
+  }
+};
+
+StoreController.getAllStore = async (req, res) => {
+  try {
+    console.log("Get cont/getAllStore ");
+   const store = new Store();
+    const store_data = await store.getAllStoreData();
+       res.render("admin", {store_data: store_data});
+
+  }catch {
+    console.log(`ERORR, cont/getAllStore , ${err.message}`);
+    res.json({state: 'fail', message: err.message});
+  }
+};
+
+
+StoreController.updateStoreByAdmin= async (req, res) => {
+  try {
+    console.log("Get cont/updateStoreByAdmin");
+   const store = new Store();
+    const result= await store.updateStoreByAdminData(req.body);
+   await res.json({state: "success", data: result});
+  }catch(err){
+    console.log(`ERORR, cont/updateStoreByAdmin, ${err.message}`);
+    res.json({state: "fail", message: err.message});
+  }
+};
+

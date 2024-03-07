@@ -31,4 +31,14 @@ router_bssr.post("/products/edit/:id",
   StoreController.validateAuthStore,
   productController.updateChosenProduct);
 
+   router_bssr.get(
+    "/all-store", 
+ StoreController.validateAdmin, 
+ StoreController.getAllStore);
+ 
+ router_bssr.post(
+    "/all-store/edit", 
+ StoreController.validateAdmin, 
+ StoreController.updateStoreByAdmin);
+
 module.exports = router_bssr;
