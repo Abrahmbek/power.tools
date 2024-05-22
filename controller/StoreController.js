@@ -49,6 +49,7 @@ StoreController.signupProcess = async (req, res) => {
     new_member.mb_type = "STORE";
    // new_member.mb_image = req.file.path;
     new_member.mb_image = req.file.path.replace(/\\/g, "/");
+  
 
     const member = new Member();
       const result = await member.singupData(new_member);

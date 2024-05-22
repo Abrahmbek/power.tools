@@ -2,6 +2,9 @@ const MemberModel = require("../schema/member.model");
 const Definer = require("../lib/mistake");
 const assert = require("assert");
 const bcrypt = require("bcryptjs");
+const { shapeIntoMongooseObjectId, lookup_auth_member_following, lookup_auth_member_liked } = require("../lib/config");
+const View = require("./View");
+//const Like = require("./Like");
 
 class Member {
       constructor() {
@@ -53,7 +56,65 @@ class Member {
       }catch(err) {
         throw err;
       }
-   }
+  }
+  
+     async getChosenMemberData(member, id){
+            try {
+              const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
+          id = shapeIntoMongooseObjectId(id); 
+          console.log("member:::", member);
+
+          let aggregateQuery = [
+              { $match: {_id: id, mb_status: "ACTIVE" } },
+             {$unset: "mb_password"},
+          ];
+
+         if (member) {
+          //condition if not seen before
+          await this.viewChosenItemByMember(member, id, "member");
+
+          aggregateQuery.push(lookup_auth_member_liked(auth_mb_id));
+            aggregateQuery.push(lookup_auth_member_following(auth_mb_id, 'members'));
+         }
+
+          const result = await this.memberModel.aggregate(aggregateQuery).exec();
+
+          assert.ok(result, Definer.general_err2);
+          return result[0];
+
+            }catch (err)
+             { console.log('....err');
+                throw err;
+            }
+  }
+  
+     async viewChosenItemByMember(member, view_ref_id, group_type) {
+
+          try {
+         
+            view_ref_id = shapeIntoMongooseObjectId(view_ref_id);
+            const mb_id = shapeIntoMongooseObjectId(member._id);
+
+            const view = new View(mb_id);
+             //validation needed
+              const isValid = await view.validateChosenTarget(view_ref_id, group_type);
+               console.log("isvalid:::", isValid);
+               assert.ok(isValid, Definer.general_err1);
+             //logged user has been target before
+            const doesExist = await view.checkViewExistance(view_ref_id);
+            console.log("doesExist:", doesExist);
+          
+            if(!doesExist) {
+             const result = await view.insertMemberView(view_ref_id, group_type);
+             assert.ok(result, Definer.general_err1);
+            }
+
+           return true;
+
+          } catch (err) {
+            throw err;
+          }
+        }
 }
 
 
