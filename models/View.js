@@ -36,7 +36,7 @@ class View {
              break;
              case "community":
              result = await this.boArticleModel
-              .findOne({
+              .findById({
                 _id: view_ref_id, 
                   art_status: "active",
                     })

@@ -6,6 +6,43 @@ const Store = require("../models/Store")
 
 let StoreController = module.exports;
 
+
+StoreController.getStores = async (req, res) => {   
+  try {
+      console.log("GET: cont/getMyStore"); 
+      const data = req.query,                      
+     store = new Store(),                
+     result = await store.getStoreData(req.member, data);   
+   res.json({state: 'success', data: result});    
+  } catch(err) {
+    console.log(`ERORR, cont/home, ${err.message}`);
+    res.json({state: 'fail', message: err.message});
+  }
+}
+
+StoreController.getChosenStore = async (req, res) => {
+  try {
+      console.log("GET: cont/getChosenStore"); 
+      const id = req.params.id;
+      const store = new Store();
+      const result =  await store.getChosenStoreData(req.member, id);    
+      
+   res.json({state: 'success', data: result});
+  } catch(err) {
+    console.log(`ERORR, cont/getChosenResrtaurants, ${err.message}`);
+    res.json({state: 'fail', message: err.message});
+  }
+}
+
+
+
+
+
+
+
+/************************************************
+ *         BSSR RELATED METHOD      * 
+ **********************************************/
 StoreController.home = (req, res) => {
   try {
     console.log("GET cont/home");
@@ -47,7 +84,7 @@ StoreController.signupProcess = async (req, res) => {
 
     let new_member = req.body;
     new_member.mb_type = "STORE";
-   // new_member.mb_image = req.file.path;
+    //new_member.mb_image = req.file.path;
     new_member.mb_image = req.file.path.replace(/\\/g, "/");
   
 
@@ -84,7 +121,7 @@ StoreController.loginProcess = async (req, res) => {
     req.session.member = result;
     req.session.save(function () {
       result.mb_type === "ADMIN"
-      ? res.redirect("/Store/all-store")
+      ? res.redirect("/Store/all-store")      //shu yerda
       : res.redirect("/Store/products/menu");
     });
   } catch (err) {
@@ -143,8 +180,8 @@ StoreController.getAllStore = async (req, res) => {
   try {
     console.log("Get cont/getAllStore ");
    const store = new Store();
-    const store_data = await store.getAllStoreData();
-       res.render("admin", {store_data: store_data});
+    const stores_data = await store.getAllStoreData();
+       res.render("all-stores", {stores_data: stores_data});
 
   }catch {
     console.log(`ERORR, cont/getAllStore , ${err.message}`);

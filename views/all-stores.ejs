@@ -1,4 +1,4 @@
- <%- include('includes/header') %>
+<%- include('includes/header') %>
 
 <link rel="stylesheet" type="text/css" href="/css/menu.css"/>
 
@@ -11,7 +11,7 @@
             </li>
 
                 <li class="nav-item" style="cursor: pointer">
-                    <a class="nav-link"  href="/Store/all-store">All-Store</a>
+                    <a class="nav-link"  href="/Store/all-store">All-Store</a>   
                 </li>
                 <li class="nav-item" style="cursor: pointer">
                     <a class="nav-link"  href="/Store/logout">Logout</a>
@@ -34,7 +34,7 @@
                      <th scope="col">Store condition</th>
                      </tr>
                     </thead>
-                    <% store_data.map(function(value, key) { %>
+                    <% stores_data.map(function(value, key) { %>
                         <tbody style="background: white;">
                          <td><%= key +1 %></td>
                          <td><%= value.mb_nick %></td>
@@ -111,4 +111,3 @@ $(".mb_status").on("change", function(e) {
 
 
 <%- include('includes/footer') %> 
-
