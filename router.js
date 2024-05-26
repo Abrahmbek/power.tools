@@ -4,7 +4,9 @@ const memberController = require("./controller/memberController");
 const productController = require("./controller/productController");
 const StoreController = require("./controller/StoreController");
 const orderController = require("./controller/orderController");
-
+const communityController = require('./controller/communityController');
+const uploader_community = require('./utils/upload-multer')('community');
+const uploader_member = require('./utils/upload-multer')('members');
 /*******************************
  *      REST API
  *******************************/
@@ -57,5 +59,32 @@ memberController.retrieveAuthMember,
 orderController.editChosenOrder
 );
 
+// community releated routers
+
+router.post("/community/image",
+uploader_community.single('community_image'),
+ communityController.imageInsertion
+);
+
+
+router.post("/community/create",
+memberController.retrieveAuthMember,
+ communityController.createArticle
+);
+
+router.get("/community/articles",
+memberController.retrieveAuthMember,
+ communityController.getMemberArticles
+);
+
+router.get("/community/target",
+memberController.retrieveAuthMember,
+ communityController.getArticles
+);
+
+router.get("/community/single-article/:art_id",
+memberController.retrieveAuthMember,
+ communityController.getChosenArticles
+);
 
 module.exports = router;

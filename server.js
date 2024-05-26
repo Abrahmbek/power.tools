@@ -1,11 +1,13 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-const http = require( "http");    
-const mongoose = require("mongoose");     
+ const http = require( "http");    
+ const mongoose = require("mongoose");     
 
-  //const mongoose = require("mongoose").default;       // mongo db ni talab qilib qilib oldik
-//mongoose.set("strictQuery", false);               
+  //const mongoose = require("mongoose").default;       
+ //mongoose.set("strictQuery", false);  
+
+
 const connectionString = process.env.MONGO_URL;
 
 

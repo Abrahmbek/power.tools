@@ -2,14 +2,14 @@
 const ViewModel = require("../schema/view.model");
 const MemberModel =require("../schema/member.model");
 const ProductModel =require("../schema/product.model");
-//const BoArticleModel =require("../schema/bo_article.model");
+const BoArticleModel =require("../schema/bo_article.model");
 
 class View {
       constructor(mb_id) {
             this.viewModel = ViewModel;
             this.memberModel = MemberModel;
             this.productModel = ProductModel;
-            //   this.boArticleModel = BoArticleModel;
+              this.boArticleModel = BoArticleModel;
             this.mb_id = mb_id;
       }
 
@@ -20,7 +20,7 @@ class View {
              switch(group_type) {
              case "member":
               result = await this.memberModel
-               .findById({
+               .findOne({
                 _id: view_ref_id, 
                   mb_status: "ACTIVE",
              })
@@ -28,7 +28,7 @@ class View {
              break;
            case "product":
              result = await this.productModel
-              .findById({                                    // bu yerda ham  findById
+              .findOne({                                    // bu yerda ham  findById
                 _id: view_ref_id, 
                   product_status: "PROCESS",
                     })
@@ -36,7 +36,7 @@ class View {
              break;
              case "community":
              result = await this.boArticleModel
-              .findById({
+              .findOne({
                 _id: view_ref_id, 
                   art_status: "active",
                     })
