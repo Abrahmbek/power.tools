@@ -4,7 +4,8 @@ const memberController = require("./controller/memberController");
 const productController = require("./controller/productController");
 const StoreController = require("./controller/StoreController");
 const orderController = require("./controller/orderController");
-const communityController = require('./controller/communityController');
+const communityController = require("./controller/communityController");
+const followController = require('./controller/followController');
 const uploader_community = require('./utils/upload-multer')('community');
 const uploader_member = require('./utils/upload-multer')('members');
 /*******************************
@@ -20,6 +21,17 @@ router.get("/check-me", memberController.checkMyAuthantication);
 router.get("/member/:id",
 memberController.retrieveAuthMember,
       memberController.getChosenMember);
+     
+router.post("/member-liken",
+memberController.retrieveAuthMember,
+memberController.likeMemberChosen);
+
+router.post("/member/update",
+uploader_member.single("mb_image"),
+memberController.retrieveAuthMember,
+memberController.updateMember
+);
+
 
       //other routers
 router.post("/products",
@@ -85,6 +97,28 @@ memberController.retrieveAuthMember,
 router.get("/community/single-article/:art_id",
 memberController.retrieveAuthMember,
  communityController.getChosenArticles
+);
+
+// Following releated routers
+
+router.post("/follow/subscribe",
+memberController.retrieveAuthMember,
+ followController.subscribe$
+);
+
+
+router.post("/follow/unsubscribe",
+memberController.retrieveAuthMember,
+ followController.unsubscribe$
+);
+
+router.get("/follow/followings",
+ followController.getMemberFollowings
+);
+
+router.get("/follow/followers",
+memberController.retrieveAuthMember,
+ followController.getMemberFollowers
 );
 
 module.exports = router;

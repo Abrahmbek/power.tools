@@ -16,7 +16,8 @@ const store = new MongoDBStore({
          
 
 //1: Kirish code
-app.use(express.static("public"));                
+app.use(express.static("public")); 
+app.use("/uploads", express.static(__dirname + "/uploads") );               
 app.use(express.json());                       
 app.use(express.urlencoded({ extended: true }));  
 app.use(cookieParser());
@@ -58,4 +59,33 @@ app.use("/Store", router_bssr);
 app.use("/", router);
 
 
-module.exports = app;
+const server = http.createServer(app); 
+ /**SOCKET.IO BACKEND SERVER */
+
+const io = require("socket.io")(server, {
+    serverClient: false,
+    origins: "*:*",
+    transport: ["websocket", "xhr-polling"],
+});
+
+let online_users = 0;
+io.on("connection", function(socket) {
+    online_users++;
+    console.log("New user, total:", online_users);
+    socket.emit("greetMsg", {text: "welcome"});
+    io.emit("infoMsg", {total: online_users});
+
+    socket.on('disconnect', function() {
+        online_users--;
+        socket.broadcast.emit("infoMsg", {total: online_users});
+        console.log("client disconnected, total:", online_users);
+    });
+
+    socket.on("createMsg", function (data) {
+        console.log("createMsg:", data);
+        io.emit("newMsg", data);
+    });
+});
+
+
+module.exports = server;

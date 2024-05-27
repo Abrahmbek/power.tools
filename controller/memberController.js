@@ -100,6 +100,29 @@ memberController.getChosenMember = async  (req, res) => {
        }
 };
 
+
+
+memberController.likeMemberChosen = async  (req, res) => {
+    try {
+        console.log("GET cont/likeMemberChosen");
+       assert.ok(req.member, Definer.auth_err5);
+
+       const member =  new Member(),
+        like_ref_id = req.body.like_ref_id,
+       group_type = req.body.group_type;
+
+       const result = await member.likeChosenItemMember(
+        req.member,
+        like_ref_id,
+        group_type
+       );
+        
+        res.json({state: 'succeed', data: result });
+       }catch (err) {
+         console.log(`ERORR, cont/likeMemberChosen,${err.message}`);
+         res.json({state: 'fail', message: err.message});
+       }
+};
 memberController.retrieveAuthMember = (req, res, next) => {
   try{
      const token = req.cookies["access_token"];
@@ -111,4 +134,23 @@ memberController.retrieveAuthMember = (req, res, next) => {
        console.log(`ERORR, cont/retrieveAuthMember${err.message}`);
     next();
   }
+};
+
+memberController.updateMember = async  (req, res) => {
+    try {
+        console.log("POST cont/updateMember");
+       assert.ok(req.member, Definer.auth_err3);
+
+       const member =  new Member();
+     const result = await member.updateMemberData(
+        req.member?._id,
+       req.body, 
+       req.file
+       );
+        
+        res.json({state: 'succeed', data: result });
+       }catch (err) {
+         console.log(`ERORR, cont/updateMember,${err.message}`);
+         res.json({state: 'fail', message: err.message});
+       }
 };

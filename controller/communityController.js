@@ -4,8 +4,8 @@ const assert = require("assert");
 const Community = require("../models/Community");
 
 
-let communityController = module.exports;
 
+let communityController = module.exports;
 communityController.imageInsertion = async (req, res) => {
       try{
      console.log("POST: cont/imageInsertion");   
