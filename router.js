@@ -8,6 +8,7 @@ const communityController = require("./controller/communityController");
 const followController = require('./controller/followController');
 const uploader_community = require('./utils/upload-multer')('community');
 const uploader_member = require('./utils/upload-multer')('members');
+
 /*******************************
  *      REST API
  *******************************/
@@ -103,13 +104,13 @@ memberController.retrieveAuthMember,
 
 router.post("/follow/subscribe",
 memberController.retrieveAuthMember,
- followController.subscribe$
+ followController.subscribe
 );
 
 
 router.post("/follow/unsubscribe",
 memberController.retrieveAuthMember,
- followController.unsubscribe$
+ followController.unsubscribe
 );
 
 router.get("/follow/followings",

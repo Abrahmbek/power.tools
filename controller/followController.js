@@ -1,9 +1,11 @@
+
+
 const Definer = require("../lib/mistake");
 const assert = require("assert");
 const Follow = require("../models/Follow");
 
 let = followController = module.exports;
-followController.subscribe$ = async (req, res) => {
+followController.subscribe = async (req, res) => {
       try{
      console.log("POST: cont/subscribe" );   
    assert.ok(req.member, Definer.auth_err5);
@@ -18,7 +20,7 @@ followController.subscribe$ = async (req, res) => {
   }
 };
 
-followController.unsubscribe$ = async (req, res) => {
+followController.unsubscribe = async (req, res) => {
       try{
      console.log("POST: cont/unsubscribe" );   
    assert.ok(req.member, Definer.auth_err5);
