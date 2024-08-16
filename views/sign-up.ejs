@@ -1,0 +1,163 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/login.css" />
+
+<body>
+  <form
+    onsubmit="return validateSignUpForm()"
+    class="login_container"
+    action="/Store/sign-up"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="login_frame" style="width: 630px; height: 692px">
+      <div class="login_top">
+        <span class="sign-up">Sign-Up</span>
+        <div>
+          Back to Home Page <a href="/Store" style="color: #6440fb">Home</a>
+        </div>
+        <p>
+          Are you registered?
+          <a href="/Store/login" style="color: #6440fb">Login</a>
+        </p>
+      </div>
+      <div class="sign_input_frame">
+        <div class="sign-up_frame">
+          <label>User name</label>
+          <input
+            type="text"
+            name="mb_nick"
+            class="mb_nick"
+            placeholder="enter your name"
+            value=""
+            required
+          />
+        </div>
+        <div class="sign-up_frame">
+          <label>Phone</label>
+          <input
+            type="text"
+            name="mb_phone"
+            class="mb_phone"
+            placeholder="enter your phone number"
+            value=""
+            required
+          />
+        </div>
+      </div>
+      <div></div>
+      <div class="sign_input_frame">
+        <div class="sign-up_frame">
+          <label>Password</label>
+          <input
+            type="password"
+            name="mb_password"
+            class="mb_password"
+            placeholder="enter your password"
+            value=""
+            required
+          />
+        </div>
+        <div class="sign-up_frame">
+          <label>Password</label>
+          <input
+            type="password"
+            name="mb_confirm_password"
+            class="mb_confirm_password"
+            placeholder="confirm your password"
+            value=""
+            required
+          />
+        </div>
+      </div>
+
+      <div class="login_input_frame">
+        <div class="media-frame">
+          <img class="upload_img_frame" src="/images/shop_img.jpg" />
+          <div class="upload_container">
+            <span class="media_text">upload your Store image</span>
+            <div class="filebox bs3-primery preview-image">
+              <input
+                class="upload-name"
+                value="choose image"
+                disabled="disabled"
+              />
+              <label for="input_file">Upload Image</label>
+              <input
+                type="file"
+                id="input_file"
+                name="store_img"
+                class="upload-hidden form-control-file store_img"
+              />
+            </div>
+            <p class="thumbnail_desc">
+              upload your Store image here
+              <br />
+              Important instructions: jpg. jpeg, png <br />The image you upload
+              must not contain text
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <button class="login_btn btn" name="sign-up" type="submit">
+        Registration
+      </button>
+    </div>
+  </form>
+</body>
+<script>
+  $(function () {
+    let fileTarget = $(".filebox .upload-hidden");
+    let filename = "";
+    fileTarget.on("change", function () {
+      if (window.FileReader) {
+        const uploading_file = $(this)[0].files[0];
+        const fileType = uploading_file["type"];
+        const validImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+        if (!validImageTypes.includes(fileType)) {
+          alert("Please upload images in a licensed format: jpeg, jpg, png");
+        } else {
+          if (uploading_file) {
+            console.log(URL.createObjectURL(uploading_file));
+            $(".upload_img_frame")
+              .attr("src", URL.createObjectURL(uploading_file))
+              .addClass("success");
+          }
+          filename = uploading_file.name;
+        }
+      }
+      $(this).siblings(".upload-name").val(filename);
+    });
+  });
+
+  function validateSignUpForm() {
+    const mb_nick = $(".mb_nick").val();
+    const mb_phone = $(".mb_phone").val();
+    const mb_password = $(".mb_password").val();
+    const mb_confirm_password = $(".mb_confirm_password").val();
+    const store_img = $(".store_img").get(0).files[0] ?? null;
+
+    if (
+      mb_nick == "" ||
+      mb_phone == "" ||
+      mb_password == "" ||
+      mb_confirm_password == ""
+    ) {
+      alert("Please enter all information");
+      return false;
+    } else if (mb_password !== mb_confirm_password) {
+      alert(`please enter the correct password`);
+      return false;
+    }
+
+    if (!store_img) {
+      alert("Please upload a picture");
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+<%- include('includes/footer') %>
