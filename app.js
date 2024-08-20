@@ -1,3 +1,23 @@
+<<<<<<< HEAD
+const express = require("express");                         
+const app = express();                             
+
+
+
+// MongoDB call
+ 
+ const db = require("./server").db();            
+
+const mongodb = require("mongodb");          
+
+
+//1: Kirish code
+app.use(express.static("public"));                  
+app.use(express.json());                      
+app.use(express.urlencoded({extended: true}));  
+
+// 2: Session code
+=======
 const express = require("express");    
 const http = require("http");                       
 const app = express();                             
@@ -48,11 +68,16 @@ app.use(function(req, res, next) {
 });
 
 
+>>>>>>> develop
 // 3: Views code
 
  app.set("views",   "views");                     
  app.set("view engine",  "ejs",);   
 
+<<<<<<< HEAD
+// 4 Routing code
+ module.exports = app;
+=======
 
 // 4 Routing code
 app.use("/Store", router_bssr);
@@ -89,3 +114,4 @@ io.on("connection", function(socket) {
 
 
 module.exports = server;
+>>>>>>> develop
