@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  node:
+    container_name: power_tools
+    restart: always
+    image: node:16.10.0
+    ports:
+      - 3001:3001
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app
+
+    networks:
+      - power_network
+
+    command: bash -c "npm install && npm run start:prod"
+
+networks:
+  power_network:
+    driver: bridge
